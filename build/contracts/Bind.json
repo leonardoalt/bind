@@ -1,0 +1,15 @@
+{
+  "contract_name": "Bind",
+  "abi": [],
+  "unlinked_binary": "",
+  "networks": {
+    "3": {
+      "updated_at": 0
+    },
+    "42": {
+      "address": "",
+      "updated_at": 0
+    }
+  },
+  "schema_version": "0.0.5"
+}
