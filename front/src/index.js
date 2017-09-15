@@ -4,6 +4,7 @@ import {Router, useRouterHistory} from 'react-router';
 import Routes from './Routes';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {createHashHistory} from 'history';
+import PropTypes from 'prop-types';
 
 
 // Helpers for debugging
@@ -27,5 +28,9 @@ class Index extends React.Component {
     );
   }
 }
+
+Index.childContextTypes = {
+  auth: PropTypes.bool
+};
 
 render(<Index />, document.getElementById('app'));

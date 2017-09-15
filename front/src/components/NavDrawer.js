@@ -41,8 +41,8 @@ class NavDrawer extends Component {
         onChange={onChangeList}
       >
       <ListItem
-        primaryText='uPort Login'
-        href='#/login'
+        primaryText='My Contracts'
+        href='#/my_contracts'
       />
       </SelectableList>
     </Drawer>
