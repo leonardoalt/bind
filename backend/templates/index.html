@@ -1,0 +1,22 @@
+<html>
+  <title>OCR Login</title>
+  <h1>Hallo! Bitte log Dich ein, um Dateien hochladen zu können</h1>
+  <form method='POST'>
+    <input type='text' name='username'>Username</input>
+    <input type='password' name='pw'>Password</input>
+    <input type='submit' name='submit'></input>
+  </form>
+  <br>
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+{% if errors %}
+<div class="alert-message block-message error">
+  <a class="close" href="#">Error</a>
+  <ul>
+    {%- for msg in errors %}
+    <li>{{ msg }}</li>
+    {% endfor -%}
+  </ul>
+</div>
+{% endif %}
+{% endwith %}
+</html>

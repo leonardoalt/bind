@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>
+<html>
+<title>Erfolg! </title>
+<h1>Die Datei wurde erfolgreich hochgeladen!</h1>
+
+<div> Eine Email mit Downloadlink wird gesendet, sobald das System fertig ist. Dies kann eine Weile dauern.<br>
+Sollte nach 24h noch keine Antwort kommen, bitte sende eine Mail an sarah.schulz@ims.uni-stuttgart.de</div>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+</html>
