@@ -10,6 +10,7 @@ class Login extends Component {
       auth: false,
       profile: null
     }
+    window.auth = false;
   }
 
   componentWillMount() {
@@ -27,6 +28,7 @@ class Login extends Component {
       notifications: true
     }).then((userProfile) => {
       this.props.setAuthFunction(true);
+      console.log(window.auth);
       this.props.setProfileFunction(userProfile);
       console.log(userProfile);
     }).catch(err => {

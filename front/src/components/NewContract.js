@@ -22,6 +22,7 @@ class NewContract extends Component {
 
   setAuth(_auth) {
     this.setState({ auth: _auth });
+    window.auth = _auth;
   }
 
   setProfile(_profile) {
