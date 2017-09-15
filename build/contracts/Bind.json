@@ -1,10 +1,35 @@
 {
   "contract_name": "Bind",
-  "abi": [],
-  "unlinked_binary": "",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function",
+      "signature": "0x8da5cb5b"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor",
+      "signature": "constructor"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b60bd8061003b6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b8114603c575b600080fd5b3415604657600080fd5b604c6075565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b60005473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058206c0f18f3c281702e745798811c3185af317029f0e440f019ad6d9b307bddc6030029",
   "networks": {
     "3": {
       "updated_at": 0
+    },
+    "4": {
+      "address": "0xc1049a51a1a1b155e5C62341D7905910290De6e7",
+      "updated_at": 1505509331418
     },
     "42": {
       "address": "",
