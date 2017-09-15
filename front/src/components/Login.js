@@ -26,6 +26,8 @@ class Login extends Component {
       requested: ['name'],
       notifications: true
     }).then((userProfile) => {
+      this.props.setAuthFunction(true);
+      this.props.setProfileFunction(userProfile);
       console.log(userProfile);
     }).catch(err => {
       console.log('Error: ' + err);
