@@ -26,10 +26,14 @@ contract Contract {
     _;
   }
 
-  function Contract(address _buyer, address _seller,
-                    PAY_TYPE _payType, uint _firstPayDate,
-                    uint _payAmount, uint _depositAmount,
-                    uint _endDate, string _desc) public {
+  function Contract(address _seller,
+                    address _buyer,
+                    PAY_TYPE _payType,
+                    uint _payAmount,
+                    uint _firstPayDate,
+                    uint _depositAmount,
+                    uint _endDate,
+                    string _desc) public {
     owner = msg.sender;
     buyer = _buyer;
     seller = _seller;

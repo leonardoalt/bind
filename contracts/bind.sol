@@ -5,8 +5,8 @@ import './contract.sol';
 contract Bind {
 
   address public owner;
-  mapping (address => Contract[]) contracts1p;
-  mapping (address => Contract[]) contracts2p;
+  /* store contracts for each addr */
+  mapping (address => Contract[]) addrContracts;
 
   modifier onlyOwner() {
     require(msg.sender == owner);
@@ -22,26 +22,42 @@ contract Bind {
     owner = msg.sender;
   }
 
-  function createContract(address _p2,
+  function createSinglePayContract(address _buyer,
+                                   uint _payAmount,
+                                   string _desc) public {
+    Contract _contract = new Contract(msg.sender,
+                                      _buyer,
+                                      Contract.PAY_TYPE.SINGLE,
+                                      _payAmount,
+                                      0,
+                                      0,
+                                      0,
+                                      _desc);
+    addrContracts[msg.sender].push(_contract);
+    addrContracts[_buyer].push(_contract);
+  }
+
+  function createRecurrentPayContract(address _buyer,
                           Contract.PAY_TYPE _payType,
-                          uint _payDate1,
-                          uint _payValue,
-                          uint _payDeposit,
+                          uint _payAmount,
+                          uint _firstPayDate,
+                          uint _depositAmount,
                           uint _endDate,
                           string _desc) public {
-    Contract _contract = new Contract(msg.sender, _p2, _payType, _payDate1,
-                                      _payValue, _payDeposit,
-                                      _endDate, _desc);
-    contracts1p[msg.sender].push(_contract);
-    contracts2p[_p2].push(_contract);
+    Contract _contract = new Contract(msg.sender,
+                                      _buyer,
+                                      _payType,
+                                      _payAmount,
+                                      _firstPayDate,
+                                      _depositAmount,
+                                      _endDate,
+                                      _desc);
+    addrContracts[msg.sender].push(_contract);
+    addrContracts[_buyer].push(_contract);
   }
 
-  function getContracts1p() public constant returns(Contract[]) {
-    return contracts1p[msg.sender];
-  }
-
-  function getContracts2p() public constant returns(Contract[]) {
-    return contracts2p[msg.sender];
+  function getContracts() public constant returns(Contract[]) {
+    return addrContracts[msg.sender];
   }
 }
 
