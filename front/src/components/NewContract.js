@@ -103,6 +103,8 @@ class NewContract extends Component {
       return;
     var _contract = this.state.contractInstance;
     this.setState({ transactionPending: true });
+    var addr = checkAddressMNID(this.state.profile.address);
+    console.log(addr);
     //return new Promise(function(resolve, reject) {
     //  _contract.createSinglePayContract(data.buyer,
     //                                    new BigNumber(data.amount),
@@ -120,7 +122,7 @@ class NewContract extends Component {
                                          new BigNumber(data.deposit),
                                          new BigNumber(moment(data.endDate).unix()),
                                          data.desc,
-      {from: this.context.web3.web3.eth.defaultAccount})
+      {from: addr})
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
