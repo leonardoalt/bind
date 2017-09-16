@@ -27,9 +27,10 @@ class Login extends Component {
       requested: ['name'],
       notifications: true
     }).then((userProfile) => {
-      this.props.setAuthFunction(true);
-      console.log(window.auth);
-      this.props.setProfileFunction(userProfile);
+      window.auth = true;
+      window.profile = userProfile;
+      //this.props.setAuthFunction(true);
+      //this.props.setProfileFunction(userProfile);
       console.log(userProfile);
       console.log(uport);
       console.log(web3);

@@ -19,7 +19,6 @@ class NewContract extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      auth: false,
       profile: null,
       contractInstance: null,
       transactionPending: false
@@ -45,23 +44,14 @@ class NewContract extends Component {
   componentDidMount () {
   }
 
-  setAuth(_auth) {
-    this.setState({ auth: _auth });
-    window.auth = _auth;
-  }
-
-  setProfile(_profile) {
-    this.setState({ profile: _profile });
-    this.instantiateContract(_profile);
-  }
-
   LoginComp = () => {
-    if (this.state.auth)
+    if (window.auth) {
+      if (!this.state.contractInstance)
+          this.instantiateContract(window.profile);
       return null;
+    }
     return (
       <Login
-        setAuthFunction={this.setAuth.bind(this)}
-        setProfileFunction={this.setProfile.bind(this)}
       />
     );
   }
@@ -72,7 +62,7 @@ class NewContract extends Component {
       return;
     var _contract = this.state.contractInstance;
     this.setState({ transactionPending: true });
-    var addr = checkAddressMNID(this.state.profile.address);
+    var addr = checkAddressMNID(window.profile.address);
     console.log(addr);
     //return new Promise(function(resolve, reject) {
     //  _contract.createSinglePayContract(data.buyer,
@@ -103,6 +93,8 @@ class NewContract extends Component {
       return;
     var _contract = this.state.contractInstance;
     this.setState({ transactionPending: true });
+    var addr = checkAddressMNID(window.profile.address);
+    console.log(addr);
     //return new Promise(function(resolve, reject) {
     //  _contract.createSinglePayContract(data.buyer,
     //                                    new BigNumber(data.amount),
@@ -120,7 +112,7 @@ class NewContract extends Component {
                                          new BigNumber(data.deposit),
                                          new BigNumber(moment(data.endDate).unix()),
                                          data.desc,
-      {from: this.context.web3.web3.eth.defaultAccount})
+      {from: addr})
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });

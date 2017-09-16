@@ -13,7 +13,6 @@ class MyContracts extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      auth: false,
       contractInstance: null,
       profile: null,
       contracts: []
@@ -55,23 +54,14 @@ class MyContracts extends Component {
   componentDidMount () {
   }
 
-  setAuth(_auth) {
-    this.setState({ auth: _auth });
-    window.auth = _auth;
-  }
-
-  setProfile(_profile) {
-    this.setState({ profile: _profile });
-    this.instantiateContract(_profile);
-  }
-
   LoginComp = () => {
-    if (this.state.auth)
+    if (window.auth) {
+      if (!this.state.contractInstance)
+          this.instantiateContract(window.profile);
       return null;
+    }
     return (
       <Login
-        setAuthFunction={this.setAuth.bind(this)}
-        setProfileFunction={this.setProfile.bind(this)}
       />
     );
   }
@@ -86,7 +76,7 @@ class MyContracts extends Component {
   }
 
   ListContracts = () => {
-    if (this.state.auth === false)
+    if (window.auth === false)
       return null;
     var propItems = this.state.contracts.map(prop =>
       <Contract isDetailed={false}
