@@ -8,6 +8,7 @@ import BindJson from 'build/contracts/Bind.json';
 
 import Login from './Login';
 import Contract from './Contract';
+import Printer from './Printer';
 
 class MyContracts extends Component {
   constructor(props) {
@@ -15,7 +16,8 @@ class MyContracts extends Component {
     this.state = {
       contractInstance: null,
       profile: null,
-      contracts: []
+      contracts: [],
+      printData: null
     }
   }
 
@@ -40,7 +42,7 @@ class MyContracts extends Component {
         if (_p === '0x')
           _done =  true;
         else
-          _contracts.push({idx: i, contract: _p});
+          _contracts.push({idx: i, contract: _p, userAddress: _addr});
         ++i;
       }
       console.log(_contracts);
@@ -57,7 +59,6 @@ class MyContracts extends Component {
     this.instantiateContract(profile);
   }
 
-
   LoginComp = () => {
     if (window.auth) {
       if (this.state.contractInstance === null)
@@ -71,12 +72,24 @@ class MyContracts extends Component {
     );
   }
 
-  render () {
+  setPrint(_printData) {
+    this.setState({ printData: _printData }, this.print);
+  }
+
+  print() {
+    window.print();
+  }
+
+  PrintDiv = () => {
+    if (this.state.printData === null)
+      return null;
     return (
-      <div>
-        <this.LoginComp />
-        <this.ListContracts />
-      </div>
+      <Printer
+        sellerName={this.state.printData.sellerName}
+        buyerName={this.state.printData.buyerName}
+        amount={this.state.printData.amount}
+        desc={this.state.printData.desc}
+      />
     );
   }
 
@@ -87,6 +100,8 @@ class MyContracts extends Component {
       <Contract isExpanded={false}
         key={prop.idx}
         contract={prop.contract}
+        userAddress={prop.userAddress}
+        setPrintFunction={this.setPrint.bind(this)}
       />
     );
     return (
@@ -95,6 +110,19 @@ class MyContracts extends Component {
       </ul>
     );
   }
+
+  render () {
+    return (
+    <div>
+      <div id="react-no-print">
+        <this.LoginComp />
+        <this.ListContracts />
+      </div>
+      <this.PrintDiv />
+    </div>
+    );
+  }
+
 
 }
 

@@ -28,6 +28,8 @@ contract Contract {
 
   uint public currentPayment;            /* number of times the buyer paid a recurrent pay */
 
+  uint public sellerWithdraw;
+
   modifier onlyBy(address _addr) {
     require(msg.sender == _addr);
     _;
@@ -58,6 +60,11 @@ contract Contract {
     _;
   }
 
+  modifier hasFunds(uint _value) {
+    require(msg.value >= _value);
+    _;
+  }
+
   function Contract(address _seller,
                     address _buyer,
                     string _sellerName,
@@ -82,9 +89,10 @@ contract Contract {
     signed = false;
     terminated = false;
     currentPayment = 0;
+    sellerWithdraw = 0;
   }
 
-  function buyerSign() public
+  function buyerSign() payable public
     onlyBy(buyer)
     notSigned()
   {
@@ -96,28 +104,39 @@ contract Contract {
     }
   }
 
+  function withdraw() public
+    onlyBy(seller)
+  {
+    uint amount = sellerWithdraw;
+    sellerWithdraw = 0;
+    seller.transfer(amount);
+  }
+
   function completeSinglePay() private
+    hasFunds(payAmount)
   {
     /* TODO: should single pay contracts be terminated=true? */
-    seller.transfer(payAmount);
+    require((sellerWithdraw + payAmount) >= sellerWithdraw);
+    sellerWithdraw += payAmount;
   }
 
   /* make sure the buyer makes the deposit */
-  function startRecurrentPay() private {
-    if (msg.value < depositAmount) {
-      revert();
-    }
+  function startRecurrentPay() private
+    hasFunds(depositAmount)
+  {
   }
 
   /* buyer can only pay the current payment */
-  function buyerPayRecurring(uint paymentNumber) public
+  function buyerPayRecurring(uint paymentNumber) payable public
     onlyBy(buyer)
     isValidContract()
     isRecurrent()
     isCurrentPayment(paymentNumber)
+    hasFunds(payAmount)
   {
     currentPayment++;
-    seller.transfer(payAmount);
+    require((sellerWithdraw + payAmount) >= sellerWithdraw);
+    sellerWithdraw += payAmount;
   }
 
   function terminateContract() public

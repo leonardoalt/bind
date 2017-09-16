@@ -45,7 +45,7 @@ class PdfExtract extends Component {
 
     this.setState({ uploading: true });
 
-    axios.post('http://172.30.1.150:50001/parse_contract', data, {})
+    axios.post('http://localhost:50001/parse_contract', data, {})
          .then((response) => {
            console.log('Response is');
            console.log(response);
@@ -65,7 +65,7 @@ class PdfExtract extends Component {
 
   render() {
     if (this.state.uploading) {
-      return <CircularProgress />
+      return <CircularProgress style={{margin:12}}/>
     } else {
       return <RaisedButton
                label="Read from PDF"

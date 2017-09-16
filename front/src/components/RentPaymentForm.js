@@ -8,7 +8,9 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
 
-import PdfExtract from './PdfExtract'
+import PdfExtract from './PdfExtract';
+
+import ipfsApi from 'ipfs-api';
 
 class RentPaymentForm extends Component {
   constructor(props) {
@@ -45,20 +47,32 @@ class RentPaymentForm extends Component {
   createContract = () => {
     console.log(this.props);
     console.log('create');
-    this.props.createRentPaymentContract({buyer: this.state.buyer,
-                                          sellerName: this.state.sellerName,
-                                          buyerName: this.state.buyerName,
-                                          type: this.state.payType,
-                                          amount: this.state.amount,
-                                          firstDate: this.state.firstDate,
-                                          deposit: this.state.deposit,
-                                          endDate: this.state.endDate,
-                                          desc: this.state.desc});
+
+    var ipfs = ipfsApi('localhost', '5001', {protocol:'http'});
+    var toAdd = [{
+      path: '/contract_desc',
+      content: Buffer.from(this.state.desc),
+    }];
+
+    ipfs.files.add(toAdd).then((res) => {
+      console.log(res);
+      var file = res[0];
+      let filepath = 'http://ipfs.io/ipfs/' + file.hash;
+      this.props.createRentPaymentContract({buyer: this.state.buyer,
+                                            sellerName: this.state.sellerName,
+                                            buyerName: this.state.buyerName,
+                                            type: this.state.payType,
+                                            amount: this.state.amount,
+                                            firstDate: this.state.firstDate,
+                                            deposit: this.state.deposit,
+                                            endDate: this.state.endDate,
+                                            desc: file.hash});
+    });
   }
 
   Submit = () => {
     if (this.props.txPending)
-      return <CircularProgress />
+      return <CircularProgress style={{margin:12}}/>
     return (
       <RaisedButton
         label="Create"
