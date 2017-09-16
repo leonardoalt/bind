@@ -30,7 +30,8 @@ class Login extends Component {
     var _addr;
     uport.requestCredentials(
       {
-        requested: ['name'],
+        requested: ['name', 'address'],
+        verified: ['digitalid'],
         notifications: true
       },
 
@@ -49,6 +50,7 @@ class Login extends Component {
         document.querySelector('#kqr').appendChild(aTag)
       }
     ).then((userProfile) => {
+      console.log(userProfile);
       window.auth = true;
       window.profile = userProfile;
       //this.props.setAuthFunction(true);
