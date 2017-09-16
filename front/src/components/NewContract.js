@@ -5,13 +5,14 @@ import React, { Component } from 'react'
 import BigNumber from 'bignumber.js';
 import SelectField from 'material-ui/SelectField';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import {instantiateContract} from 'utils/contract';
 import BindJson from 'build/contracts/Bind.json';
 
 import Login from './Login';
 import SinglePaymentForm from './SinglePaymentForm';
-//import RentPaymentForm from './RentPaymentForm';
+import RentPaymentForm from './RentPaymentForm';
 //import CustomPaymentForm from './CustomPaymentForm';
 
 class NewContract extends Component {
@@ -20,7 +21,6 @@ class NewContract extends Component {
     this.state = {
       auth: false,
       profile: null,
-      type: 0,
       contractInstance: null,
       transactionPending: false
     }
@@ -94,12 +94,51 @@ class NewContract extends Component {
     });
   }
 
+  createRentPaymentContract(data) {
+    console.log('rent payment data');
+    console.log(data);
+    if (this.state.contractInstance === null)
+      return;
+    var _contract = this.state.contractInstance;
+    this.setState({ transactionPending: true });
+    //return new Promise(function(resolve, reject) {
+    //  _contract.createSinglePayContract(data.buyer,
+    //                                    new BigNumber(data.amount),
+    //                                    data.desc, (error, tx) => {
+    //    if (error) reject(error);
+    //    else resolve(tx);
+    //  });
+    //})
+    _contract.createRecurrentPayContract(data.buyer,
+                                         new BigNumber(data.type),
+                                         new BigNumber(data.amount),
+                                         new BigNumber(moment(data.firstDate).unix()),
+                                         new BigNumber(data.deposit),
+                                         new BigNumber(moment(data.endDate).unix()),
+                                         data.desc,
+      {from: this.context.web3.web3.eth.defaultAccount})
+    .then((tx) => {
+      console.log(tx);
+      this.setState({ transactionPending: false });
+    })
+    .catch(e => {
+      console.log('Could not execute tx: ' + e);
+      this.setState({ transactionPending: false });
+    });
+  }
+
   Form = () => {
-    if (this.state.type === 0)
+    if (this.props.params.type === 'car')
       return <SinglePaymentForm 
               createSinglePaymentContract={this.createSinglePaymentContract.bind(this)}
               txPending={this.state.transactionPending}
              />
+    if (this.props.params.type === 'rent')
+      return <RentPaymentForm 
+              createRentPaymentContract={this.createRentPaymentContract.bind(this)}
+              txPending={this.state.transactionPending}
+             />
+    return null;
     //if (this.state.type === 1)
     //  return <RentContract />;
     //return <CustomContract />;

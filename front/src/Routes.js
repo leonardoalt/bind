@@ -9,7 +9,9 @@ import NewContract from 'components/NewContract';
 const Routes = (
   <Route path='/' component={Master}> 
     <Route path='my_contracts' component={MyContracts} />
-    <Route path='new_contract' component={NewContract} />
+    <Route path='new_contract'>
+      <Route path=':type' component={NewContract} />
+    </Route>
   </Route>
 );
 

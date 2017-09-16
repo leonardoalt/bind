@@ -46,7 +46,8 @@ class SinglePaymentForm extends Component {
   render() {
     return (
       <GridList
-        cols={3}
+        cols={2}
+        cellHeight={100}
       >
         <GridTile>
           <TextField
@@ -59,17 +60,20 @@ class SinglePaymentForm extends Component {
         </GridTile>
         <GridTile>
           <TextField
-            fullWidth={true}
+            fullWidth={false}
             name="amount"
             value={this.state.amount}
-            floatingLabelText="Amount"
+            type="number"
+            floatingLabelText="Value"
             onChange={this.handleOnChange}
           />
         </GridTile>
-        <GridTile>
+        <GridTile cols={2}>
           <TextField
             fullWidth={true}
             name="desc"
+            multiLine={true}
+            rows={2}
             value={this.state.desc}
             floatingLabelText="Description"
             onChange={this.handleOnChange}

@@ -45,8 +45,20 @@ class NavDrawer extends Component {
         href='#/my_contracts'
       />
       <ListItem
+        primaryTogglesNestedList={true}
         primaryText='New contract'
-        href='#/new_contract'
+        nestedItems={[
+          <ListItem key='new_contract_single_pay'
+            primaryTogglesNestedList={true}
+            primaryText='Car selling'
+            href='#/new_contract/car'
+          />, 
+          <ListItem key='new_contract_rent_pay'
+            primaryTogglesNestedList={true}
+            primaryText='House rent'
+            href='#/new_contract/rent'
+          />
+        ]}
       />
       </SelectableList>
     </Drawer>
