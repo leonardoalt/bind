@@ -24,6 +24,8 @@ app.config["APPLICATION_ROOT"] = "localhost:8080"
 
 cors = CORS(app, resources={r'/parse_contract': {'origins': 'http://localhost:8080'}})
 
+#call the functions from the parser in the right order
+#create a json file that is used by the javascript library to fill the template
 def run_ocr(pdf_store):
     try:
         
@@ -51,6 +53,7 @@ def run_ocr(pdf_store):
         print e
             
 
+#receive the file uploaded on the website and send it to the parser, return the resulting json
 @app.route("/parse_contract", methods=['POST'])
 @cross_origin(origin='localhost',headers=['Content-Type','Authorization'])
 def hello():
@@ -80,6 +83,6 @@ def hello():
 
                 
     
-
+#service runs on port 500001
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=50001)

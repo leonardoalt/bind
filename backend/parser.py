@@ -11,6 +11,10 @@ from polyglot.text import Text
 
 
 class Parser:
+    '''
+    retrieves an uploaded PDF, converts it to tiff, uses tesseract for ocr and parses
+    the recognized text for contract relevant data
+    '''
 
     def __init__(self,pdf_path):
         self.pdf_path = pdf_path
@@ -20,6 +24,7 @@ class Parser:
         self.txt=''
         self.sum=0
     
+    #convert the pdf to tif to make it useable with tesseract
     def convert_to_tif(self):
         try:
             os.system("mkdir "+self.tif_dir)
@@ -29,7 +34,8 @@ class Parser:
         except Exception as es:
             print str(es)
             return False
-        
+    
+    #run tesseract on the tif file and return the txt
     def tesseract(self):
         try:
             os.system("mkdir "+self.txt_dir)
@@ -40,7 +46,8 @@ class Parser:
         except Exception as es:
             print str(es)
             return False
-            
+    
+    #read and clean the txt created by tesseract        
     def read_txt(self):
         for f in sorted(os.listdir(self.txt_dir)):
             self.txt+="\n"+codecs.open(self.txt_dir+'/'+f,'r','utf8').read()
@@ -51,7 +58,7 @@ class Parser:
         self.txt = cleantext
 
 
-        
+    #use the named entity recognition to find sender and receiver
     def extract_parties(self,ners):
         pers_tmp=[]
         for el in ners:
@@ -67,6 +74,7 @@ class Parser:
         pers=[]
         i=0
         lastadded=0
+        #join a two-part party together (like husband and wife as landlords)
         while i in range(len(pers_tmp)-1):
 
             if re.search(' '.join(pers_tmp[i])+'( +(and|&) +)'+' '.join(pers_tmp[i+1]),self.txt)!=None:
@@ -91,6 +99,7 @@ class Parser:
             ptwostring=pers[1]
 
         context = self.txt[entityindex-100:entityindex+100]
+        #check for the proximity of tenant and landlord to NE
         if self.contract_type=="rental":
             try:
                 if "tenant" in context.lower():
@@ -121,6 +130,7 @@ class Parser:
                 landlord = ponestring
             
             return landlord, tenant
+        #if its a contract that is not a rental contract, look for different key words
         else:
             try:
                 if "seller" in self.txt.lower():
@@ -148,11 +158,13 @@ class Parser:
                 landlord = ponestring
             return landlord, tenant
 
+    #return the entire text body of the PDF
     def return_contract(self):
 
         return self.txt
 
-
+    #extract the sum that is part of the contract
+    #find out if it is a monthly/weekly payment or one-time
     def sum_payment(self):
         if re.findall("monthly|per month",self.txt) !=[]:
                 sums=[]
@@ -197,7 +209,8 @@ class Parser:
                 sums=["0"]
             self.sum = int(sums[0].replace(' ','').replace('$','').replace(',',''))
             return self.sum,"one-time"
-        
+            
+    #check if a deposit is involved
     def find_deposit(self):
         sums=re.findall("\d+ *\, *\d+\$*",self.txt)
         deposit=0
@@ -211,12 +224,14 @@ class Parser:
                 deposit = int(s.replace(' ','').replace('$','').replace(',',''))
                 break
         return deposit
-      
+    
+    #use named entity recognition on the text
     def get_nes(self):
         text = Text(self.txt)
         print text.entities
         return text.entities
-        
+    
+    #delete all files that are not needed anymore
     def tidy_up(self):
         shutil.rmtree(self.tif_dir)
         shutil.rmtree(self.txt_dir)
