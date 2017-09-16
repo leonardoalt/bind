@@ -40,7 +40,7 @@ contract Bind {
   function createRecurrentPayContract(address _buyer,
                           Contract.PAY_TYPE _payType,
                           uint _payAmount,
-                          uint _firstPayDate,
+                          uint _firstPayDueDate,
                           uint _depositAmount,
                           uint _endDate,
                           string _desc) public {
@@ -48,7 +48,7 @@ contract Bind {
                                       _buyer,
                                       _payType,
                                       _payAmount,
-                                      _firstPayDate,
+                                      _firstPayDueDate,
                                       _depositAmount,
                                       _endDate,
                                       _desc);

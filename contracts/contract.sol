@@ -11,21 +11,28 @@ contract Contract {
   address public owner;
   address buyer;                /* the party that is paying*/
   address seller;               /* the party providing the object/service */
-  string desc;                  /* contract object description */
-  uint payAmount;           /* amount to be paid */
+  string public desc;                  /* contract object description */
+  uint public payAmount;           /* amount to be paid */
 
-  PAY_TYPE payType;
+  PAY_TYPE public payType;
 
   /* only for recurrent payments */
-  uint firstPayDate;        /* used for recurrent payments */
-  uint depositAmount;           /* deposit stored in the contract */
-  uint endDate;                 /* date a recurrent contract finishes */
+  uint public firstPayDueDate;        /* recurrent payment first due date */
+  uint public depositAmount;           /* deposit stored in the contract */
+  uint public endDate;                 /* date a recurrent contract finishes */
 
-  bool signed;                  /* true once the buyer signs */
-  bool terminated;              /* true once the contract is terminated */
+  bool public signed;                  /* true once the buyer signs */
+  bool public terminated;              /* true once the contract is terminated */
+
+  uint public currentPayment;            /* number of times the buyer paid a recurrent pay */
 
   modifier onlyBy(address _addr) {
     require(msg.sender == _addr);
+    _;
+  }
+
+  modifier buyerOrSeller() {
+    require(msg.sender == buyer || msg.sender == seller);
     _;
   }
 
@@ -44,11 +51,16 @@ contract Contract {
     _;
   }
 
+  modifier isCurrentPayment(uint paymentNumber) {
+    require(currentPayment == paymentNumber);
+    _;
+  }
+
   function Contract(address _seller,
                     address _buyer,
                     PAY_TYPE _payType,
                     uint _payAmount,
-                    uint _firstPayDate,
+                    uint _firstPayDueDate,
                     uint _depositAmount,
                     uint _endDate,
                     string _desc) public {
@@ -56,13 +68,14 @@ contract Contract {
     buyer = _buyer;
     seller = _seller;
     payType = _payType;
-    firstPayDate = _firstPayDate;
+    firstPayDueDate = _firstPayDueDate;
     payAmount = _payAmount;
     depositAmount = _depositAmount;
     endDate = _endDate;
     desc = _desc;
     signed = false;
     terminated = false;
+    currentPayment = 0;
   }
 
   function buyerSign() public
@@ -83,15 +96,30 @@ contract Contract {
     seller.transfer(payAmount);
   }
 
-  function startRecurrentPay() private {
+  /* make sure the buyer makes the deposit */
+  function startRecurrentPay() view private {
+    if (msg.value < depositAmount) {
+      revert();
+    }
   }
 
-  function buyerPayRecurring() public
+  /* buyer can only pay the current payment */
+  function buyerPayRecurring(uint paymentNumber) public
     onlyBy(buyer)
     isValidContract()
     isRecurrent()
+    isCurrentPayment(paymentNumber)
   {
-    
+    currentPayment++;
+    seller.transfer(payAmount);
+  }
+
+  function terminateContract() view public
+    buyerOrSeller()
+    isValidContract()
+    isRecurrent()
+  {
+    /* TODO: can a contract be terminated if there are pending
+       payments? What should we do about pending payments? */
   }
 }
-
