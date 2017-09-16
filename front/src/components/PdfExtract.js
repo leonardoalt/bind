@@ -30,7 +30,11 @@ class PdfExtract extends Component {
     const target = event.target;
     const pdf = target.files[0];
     console.log(pdf);
-    axios.post('http://172.30.1.150:50001/parse_contract', {scan: pdf})
+
+    var data = new FormData();
+    data.append('scan', pdf);
+
+    axios.post('http://localhost:50001/parse_contract', data, {})
     .then((response) => {
       console.log('Response is')
       console.log(response);
