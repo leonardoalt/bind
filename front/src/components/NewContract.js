@@ -19,7 +19,6 @@ class NewContract extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      profile: null,
       contractInstance: null,
       transactionPending: false
     }
@@ -44,14 +43,19 @@ class NewContract extends Component {
   componentDidMount () {
   }
 
+  setProfileFunction(profile) {
+    this.instantiateContract(profile);
+  }
+
   LoginComp = () => {
     if (window.auth) {
-      if (!this.state.contractInstance)
+      if (this.state.contractInstance === null)
           this.instantiateContract(window.profile);
       return null;
     }
     return (
       <Login
+        setProfileFunction={this.setProfileFunction.bind(this)}
       />
     );
   }
@@ -79,6 +83,7 @@ class NewContract extends Component {
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
+      this.props.router.push('/my_contracts');
     })
     .catch(e => {
       console.log('Could not execute tx: ' + e);
@@ -116,6 +121,7 @@ class NewContract extends Component {
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
+      this.props.router.push('/my_contracts');
     })
     .catch(e => {
       console.log('Could not execute tx: ' + e);
