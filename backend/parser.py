@@ -18,7 +18,7 @@ class Parser:
         self.tif_dir = '/'.join(self.pdf_path.split('/')[:-1])+'/tifs'
         self.txt_dir='/'.join(self.pdf_path.split('/')[:-1])+'/txt'
         self.txt=''
-        self.sum=''
+        self.sum=0
     
     def convert_to_tif(self):
         try:
@@ -169,7 +169,7 @@ class Parser:
                     sums.append('0')
                 self.sum = sums[0]
                 self.contract_type="monthly"
-                return sums[0],"monthly"
+                return int(sums[0].replace(' ','').replace('$','').replace(',','')),"monthly"
         elif re.findall("weekly|per week",self.txt) !=[]:
                 sums=[]
                 expr= re.findall("weekly|per week",self.txt)
@@ -186,7 +186,7 @@ class Parser:
                     sums.append('0')
                 self.sum = sums[0]
                 self.contract_type="weekly"
-                return sums[0],"weekly"
+                return int(sums[0].replace(' ','').replace('$','').replace(',','')),"weekly"
         else:
             self.contract_type="one-time"
 
@@ -195,12 +195,12 @@ class Parser:
                 sums= re.findall("\d+ *\,* *\d+\$*",self.txt)
             if sums==[]:
                 sums=["0"]
-            self.sum = sums[0]
+            self.sum = int(sums[0].replace(' ','').replace('$','').replace(',',''))
             return self.sum,"one-time"
         
     def find_deposit(self):
         sums=re.findall("\d+ *\, *\d+\$*",self.txt)
-        deposit="0"
+        deposit=0
 
         for s in sums:
 
@@ -208,7 +208,7 @@ class Parser:
 
             if "deposit" in self.txt[ind-35:ind+35].lower() and len(s)>4 and int(s.replace(" ","").replace(",","").replace("$","")) > int(self.sum.replace(" ","").replace(",","").replace("$","")):
             
-                deposit = s
+                deposit = int(s.replace(' ','').replace('$','').replace(',',''))
                 break
         return deposit
       
