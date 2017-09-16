@@ -3,6 +3,12 @@ import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
+const payTypeEnum = {
+  'monthly': 2,
+  'weekly': 1,
+  'one-time': 0
+}
+
 
 class PdfExtract extends Component {
   constructor(props) {
@@ -41,8 +47,11 @@ class PdfExtract extends Component {
 
     axios.post('http://172.30.1.150:50001/parse_contract', data, {})
          .then((response) => {
-           console.log('Response is')
+           console.log('Response is');
            console.log(response);
+           // convert payType string to enum value
+           let payType = payTypeEnum[response.data['payType']];
+           response.data['payType'] = payType;
            this.props.updateContract(response.data);
          })
          .catch(error => {
