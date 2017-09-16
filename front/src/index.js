@@ -5,7 +5,6 @@ import Routes from './Routes';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {createHashHistory} from 'history';
 
-
 // Helpers for debugging
 window.React = React;
 
