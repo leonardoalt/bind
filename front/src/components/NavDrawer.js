@@ -34,7 +34,7 @@ class NavDrawer extends Component {
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
       <AppBar
-        title='Bind'
+        title='Bond'
         showMenuIconButton={false} />
       <SelectableList
         value={location.pathname}
