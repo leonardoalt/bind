@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { uport, web3 } from 'utils/uportSetup'
-import { checkAddressMNID } from 'utils/checkAddressMNID'
-import { waitForMined } from 'utils/waitForMined'
+//import { uport, web3 } from 'utils/uportSetup'
+//import { checkAddressMNID } from 'utils/checkAddressMNID'
+//import { waitForMined } from 'utils/waitForMined'
 import BigNumber from 'bignumber.js';
+import SelectField from 'material-ui/SelectField';
+import PropTypes from 'prop-types';
 
 import {instantiateContract} from 'utils/contract';
 import BindJson from 'build/contracts/Bind.json';
@@ -31,10 +33,10 @@ class NewContract extends Component {
   async instantiateContract() {
     var _contractInstance;
     try {
-      console.log(web3);
-      //_contractInstance = await instantiateContract(BindJson, web3.currentProvider);
-      let abi = web3.eth.contract(BindJson['abi']);
-      _contractInstance = abi.at(BindJson['networks']['4']['address']);
+      console.log(this.context.web3);
+      _contractInstance = await instantiateContract(BindJson, this.context.web3.web3.currentProvider);
+      //let abi = web3.eth.contract(BindJson['abi']);
+      //_contractInstance = abi.at(BindJson['networks']['4']['address']);
       console.log(_contractInstance);
     } catch(e) {
       console.log('Error instantiating contract: ' + e);
@@ -55,6 +57,7 @@ class NewContract extends Component {
   }
 
   LoginComp = () => {
+    return null;
     if (this.state.auth)
       return null;
     return (
@@ -69,25 +72,25 @@ class NewContract extends Component {
     console.log(data);
     if (this.state.contractInstance === null)
       return;
-    console.log(uport);
-    console.log(web3);
     var _contract = this.state.contractInstance;
     this.setState({ transactionPending: true });
-    return new Promise(function(resolve, reject) {
-      _contract.createContract(data.buyer, 0, 0,
-                                               new BigNumber(data.amount),
-                                               0, 0, data.desc, (error, tx) => {
-        if (error) reject(error);
-        else resolve(tx);
-      });
-    })
+    //return new Promise(function(resolve, reject) {
+    //  _contract.createSinglePayContract(data.buyer,
+    //                                    new BigNumber(data.amount),
+    //                                    data.desc, (error, tx) => {
+    //    if (error) reject(error);
+    //    else resolve(tx);
+    //  });
+    //})
+    _contract.createSinglePayContract(data.buyer, new BigNumber(data.amount), data.desc,
+      {from: this.context.web3.web3.eth.defaultAccount})
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
     })
     .catch(e => {
       console.log('Could not execute tx: ' + e);
-    this.setState({ transactionPending: false });
+      this.setState({ transactionPending: false });
     });
   }
 
@@ -112,5 +115,9 @@ class NewContract extends Component {
   }
 
 }
+
+NewContract.contextTypes = {
+  web3: PropTypes.object
+};
 
 export default NewContract;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { uport, web3 } from 'utils/uportSetup'
-import { checkAddressMNID } from 'utils/checkAddressMNID'
-import { waitForMined } from 'utils/waitForMined'
+//import { uport, web3 } from 'utils/uportSetup'
+//import { checkAddressMNID } from 'utils/checkAddressMNID'
+//import { waitForMined } from 'utils/waitForMined'
 import PropTypes from 'prop-types';
 
 import Login from './Login';
@@ -52,7 +52,7 @@ class MyContracts extends Component {
 }
 
 MyContracts.contextTypes = {
-  auth: PropTypes.bool
+  web3: PropTypes.object
 };
 
 export default MyContracts;
