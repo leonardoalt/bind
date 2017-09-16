@@ -33,13 +33,14 @@ class NavDrawer extends Component {
       onRequestChange={onRequestChangeNavDrawer}
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
-      <AppBar
-        title='Bond'
-        showMenuIconButton={false} />
-      <SelectableList
-        value={location.pathname}
-        onChange={onChangeList}
-      >
+    <AppBar
+      title=''
+      iconElementLeft={<img width="60%" src="static/logo-gray.svg"/>}
+    />
+    <SelectableList
+      value={location.pathname}
+      onChange={onChangeList}
+    >
       <ListItem
         primaryText='My Contracts'
         href='#/my_contracts'
@@ -49,18 +50,18 @@ class NavDrawer extends Component {
         primaryText='New contract'
         nestedItems={[
           <ListItem key='new_contract_single_pay'
-            primaryTogglesNestedList={true}
-            primaryText='Car Sale'
-            href='#/new_contract/car'
+                         primaryTogglesNestedList={true}
+                         primaryText='Car Sale'
+                         href='#/new_contract/car'
           />, 
           <ListItem key='new_contract_rent_pay'
-            primaryTogglesNestedList={true}
-            primaryText='Apartment Rental'
-            href='#/new_contract/rent'
+                         primaryTogglesNestedList={true}
+                         primaryText='Apartment Rental'
+                         href='#/new_contract/rent'
           />
         ]}
       />
-      </SelectableList>
+    </SelectableList>
     </Drawer>
   }
   render() {

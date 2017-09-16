@@ -11,6 +11,11 @@ import {red500} from 'material-ui/styles/colors';
 
 import NavDrawer from './NavDrawer';
 
+let welcomeLogo =
+  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+    <h1>Welcome to Bond.</h1>
+  </div>;
+
 class Master extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -176,7 +181,7 @@ class Master extends Component {
         />
         </div>
           <div style={{marginTop: 73, marginLeft:60}}>
-            {children}
+            {children ? children : welcomeLogo}
           </div>
         </div>
         <NavDrawer
