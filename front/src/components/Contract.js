@@ -177,7 +177,7 @@ class Contract extends Component {
               </TableRow>
             </TableBody>
           </Table>
-          {this.state.desc}
+          Description: {this.state.desc}
         </CardText>
         <div
           style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
