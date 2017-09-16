@@ -1,0 +1,3 @@
+polyglot download embeddings2.en ner2.en
+polyglot
+flask
