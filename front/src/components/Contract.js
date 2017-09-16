@@ -49,7 +49,8 @@ class Contract extends Component {
   async instantiate() {
     var _contract = null;
     var _contractInstance = null;
-    var _amount = '';
+    var _amount = new BigNumber(0);
+    var _deposit = new BigNumber(0);
     var _desc = '';
     var _sellerName = '';
     var _seller = '';
@@ -68,6 +69,7 @@ class Contract extends Component {
       _buyer = await _contractInstance.buyer();
       _buyerName = await _contractInstance.buyerName();
       _amount = await _contractInstance.payAmount();
+      _deposit = await _contractInstance.depositAmount();
       _desc_hash = await _contractInstance.desc();
       let filepath = 'http://ipfs.io/ipfs/' + _desc_hash;
       try {
@@ -77,17 +79,12 @@ class Contract extends Component {
         _desc = _desc_hash;
       }
       _signed = await _contractInstance.signed();
-      console.log('Signed is');
-      console.log(_signed);
-      console.log(_seller);
-      console.log(_buyer);
-      console.log(_amount);
       console.log(this.props.userAddress);
     } catch(e) {
       console.log('Error: ' + e);
     }
     this.setState({ contractInstance: _contractInstance,
-                    amount: _amount, desc: _desc,
+                    amount: _amount, desc: _desc, deposit: _deposit,
                     seller: _seller, buyer: _buyer, signed: _signed,
                     sellerName: _sellerName, buyerName: _buyerName});
   }
@@ -153,6 +150,14 @@ class Contract extends Component {
     return 'Buyer has not signed';
   } 
 
+  DepositItem = () => {
+    if (this.state.deposit.lte(0))
+      return null;
+    return (
+      <TableRowColumn style={{fontSize: 16}}>Deposit: {this.state.deposit.toString()}</TableRowColumn>
+    );
+  }
+
   render() {
     return (
     <div>
@@ -173,6 +178,7 @@ class Contract extends Component {
                 <TableRowColumn style={{fontSize: 16}}>Seller: {this.state.sellerName}</TableRowColumn>
                 <TableRowColumn style={{fontSize: 16}}>Buyer: {this.state.buyerName}</TableRowColumn>
                 <TableRowColumn style={{fontSize: 16}}>Value: {this.state.amount.toString()}</TableRowColumn>
+                <this.DepositItem />
                 <TableRowColumn style={{fontSize: 16}}>{this.buyerHasSigned()}</TableRowColumn>
               </TableRow>
             </TableBody>

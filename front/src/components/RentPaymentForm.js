@@ -182,12 +182,12 @@ class RentPaymentForm extends Component {
             onChange={this.handleOnChange}
           />
         </GridTile>
-        <GridTile cols={3}>
+        <GridTile cols={3} rows={4}>
           <TextField
             fullWidth={true}
             name="desc"
             multiLine={true}
-            rows={2}
+            rows={20}
             value={this.state.desc}
             floatingLabelText="Description"
             onChange={this.handleOnChange}

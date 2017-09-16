@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import PrintTemplate from 'react-print';
 import QRCodeWriter from './qrcodeC/src';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
+
 
 class Printer extends Component {
   constructor(props){
@@ -18,6 +27,21 @@ class Printer extends Component {
           <p>
             {this.props.desc}
           </p>
+          <Table selectable={false}>
+            <TableBody displayRowCheckbox={false}>
+              <TableRow displayBorder={false}>
+              </TableRow>
+              <TableRow displayBorder={false}>
+                <TableRowColumn style={{fontSize: 16}}>_____________________</TableRowColumn>
+                <TableRowColumn style={{fontSize: 16}}>_____________________</TableRowColumn>
+              </TableRow>
+              <TableRow displayBorder={false}>
+                <TableRowColumn style={{fontSize: 16}}>{this.props.sellerName}</TableRowColumn>
+                <TableRowColumn style={{fontSize: 16}}>{this.props.buyerName}</TableRowColumn>
+              </TableRow>
+            </TableBody>
+          </Table>
+
         </div>
       </PrintTemplate>
     )
