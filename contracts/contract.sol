@@ -97,7 +97,7 @@ contract Contract {
   }
 
   /* make sure the buyer makes the deposit */
-  function startRecurrentPay() view private {
+  function startRecurrentPay() private {
     if (msg.value < depositAmount) {
       revert();
     }
@@ -114,7 +114,7 @@ contract Contract {
     seller.transfer(payAmount);
   }
 
-  function terminateContract() view public
+  function terminateContract() public
     buyerOrSeller()
     isValidContract()
     isRecurrent()
