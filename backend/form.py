@@ -6,6 +6,7 @@ import sys
 import time
 sys.path.append('.')
 from flask import Flask, request,  jsonify
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 from parser import Parser
 from multiprocessing import Pool
@@ -16,10 +17,12 @@ from multiprocessing import Pool
 
 
 app = Flask(__name__)
-app.secret_key = 'key'
+app.config['SECRET_KEY'] = 'key'
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 app.config["APPLICATION_ROOT"] = "localhost:8080"
 
-
+cors = CORS(app, resources={r'/parse_contract': {'origins': 'http://localhost:8080'}})
 
 def run_ocr(pdf_store):
     try:
@@ -48,6 +51,7 @@ def run_ocr(pdf_store):
             
 
 @app.route("/parse_contract", methods=['POST'])
+@cross_origin(origin='localhost',headers=['Content-Type','Authorization'])
 def hello():
 
     f = request.files['scan']
