@@ -1,0 +1,3 @@
+- Changed from uPort to MetaMask (Kovan) totally
+- Remove your node_modules folder and run npm install again
+- Creating contract and listing in My Contracts WORKING CARAI

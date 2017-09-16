@@ -7,6 +7,7 @@ import {instantiateContract} from 'utils/contract';
 import BindJson from 'build/contracts/Bind.json';
 
 import Login from './Login';
+import Contract from './Contract';
 
 class MyContracts extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class MyContracts extends Component {
     this.state = {
       auth: false,
       contractInstance: null,
-      profile: null
+      profile: null,
+      contracts: []
     }
   }
 
@@ -39,14 +41,14 @@ class MyContracts extends Component {
         if (_p === '0x')
           _done =  true;
         else
-          _contracts.push(_p);
+          _contracts.push({idx: i, contract: _p});
         ++i;
       }
       console.log(_contracts);
     } catch(e) {
       console.log('Error instantiating contract: ' + e);
     }
-    this.setState({ contractInstance: _contractInstance });
+    this.setState({ contractInstance: _contractInstance, contracts: _contracts });
   }
 
  
@@ -74,10 +76,16 @@ class MyContracts extends Component {
   }
 
   render () {
+    var propItems = this.state.contracts.map(prop =>
+      <Contract isDetailed={false}
+        key={prop.idx}
+        contract={prop.contract}
+      />
+    );
     return (
-      <div>
-        <this.LoginComp />
-      </div>
+      <ul style={{flexFlow: 'column', justifyContent: 'space-between'}}>
+        {propItems}
+      </ul>
     );
   }
 
