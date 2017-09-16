@@ -10,6 +10,8 @@ class Printer extends Component {
   }
 
   render() {
+    if (this.props.print === false)
+      return null;
     return (
       <PrintTemplate>
         <div style={{marginLeft:-210}}>

@@ -40,7 +40,7 @@ class MyContracts extends Component {
         if (_p === '0x')
           _done =  true;
         else
-          _contracts.push({idx: i, contract: _p});
+          _contracts.push({idx: i, contract: _p, userAddress: _addr});
         ++i;
       }
       console.log(_contracts);
@@ -87,6 +87,7 @@ class MyContracts extends Component {
       <Contract isExpanded={false}
         key={prop.idx}
         contract={prop.contract}
+        userAddress={prop.userAddress}
       />
     );
     return (
