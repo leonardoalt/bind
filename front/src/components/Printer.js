@@ -12,7 +12,7 @@ class Printer extends Component {
   render() {
     return (
       <PrintTemplate>
-        <div style={{marginLeft:-210}}>
+        <div style={{marginLeft:-210, color:'black'}}>
           <h1>Contract between {this.props.sellerName} and {this.props.buyerName}</h1>
           <h3>Value: {this.props.amount.toString()}</h3>
           <p>
