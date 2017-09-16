@@ -37,14 +37,15 @@ def run_ocr(pdf_store):
                 ners=pipe.get_nes()
                 landlord,tenant= pipe.extract_parties(ners)
                 sumofpayment,frequency= pipe.sum_payment()
-                print "the payment are "+sumofpayment
+               
                 if frequency =="monthly" or frequency=="weekly":
                     deposit = pipe.find_deposit()
                 else:
                     deposit=''
                 text=pipe.return_contract()
                 pipe.tidy_up()
-                return {"amount":sumofpayment,"payType":frequency,"deposit": deposit, "buyer":tenant,"seller":landlord,"desc":text}
+                print {"amount":sumofpayment,"payType":frequency,"deposit": deposit, "buyerName":tenant,"sellerName":landlord,"desc":text}
+                return {"amount":sumofpayment,"payType":frequency,"deposit": deposit, "buyerName":tenant,"sellerName":landlord,"desc":text}
     except Exception as e:
         print "error!"
         print e
