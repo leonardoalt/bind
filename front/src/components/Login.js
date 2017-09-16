@@ -31,27 +31,16 @@ class Login extends Component {
       console.log(window.auth);
       this.props.setProfileFunction(userProfile);
       console.log(userProfile);
+      console.log(uport);
+      console.log(web3);
     }).catch(err => {
       console.log('Error: ' + err);
     })
   }
 
-  QrCode = () => {
-    if (this.state.auth)
-      return null;
-
-    return (
-      <div>
-        <h4>Connect with uPort</h4>
-        <h6>Scan QR code with mobile app</h6>
-      </div>
-    );
-  }
-
   render () {
     return (
       <div>
-        <this.QrCode />
       </div>
     );
   }

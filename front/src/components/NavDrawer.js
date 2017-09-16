@@ -44,6 +44,10 @@ class NavDrawer extends Component {
         primaryText='My Contracts'
         href='#/my_contracts'
       />
+      <ListItem
+        primaryText='New contract'
+        href='#/new_contract'
+      />
       </SelectableList>
     </Drawer>
   }
