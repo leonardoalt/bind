@@ -6,7 +6,7 @@ contract Bind {
 
   address public owner;
   /* store contracts for each addr */
-  mapping (address => Contract[]) addrContracts;
+  mapping (address => Contract[]) public addrContracts;
 
   modifier onlyOwner() {
     require(msg.sender == owner);
