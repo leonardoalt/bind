@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 //import { checkAddressMNID } from 'utils/checkAddressMNID'
 //import { waitForMined } from 'utils/waitForMined'
 import PropTypes from 'prop-types';
+import {instantiateContract} from 'utils/contract';
+import BindJson from 'build/contracts/Bind.json';
 
 import Login from './Login';
 
@@ -11,13 +13,43 @@ class MyContracts extends Component {
     super(props)
     this.state = {
       auth: false,
+      contractInstance: null,
       profile: null
     }
   }
 
   componentWillMount() {
+    this.instantiateContract();
   }
 
+  async instantiateContract() {
+    var _contractInstance = null;
+    try {
+      console.log(this.context.web3);
+      _contractInstance = await instantiateContract(BindJson, this.context.web3.web3.currentProvider);
+      //let abi = web3.eth.contract(BindJson['abi']);
+      //_contractInstance = abi.at(BindJson['networks']['4']['address']);
+      console.log(_contractInstance);
+      var _contracts = [];
+      var _done = false;
+      var i = 0;
+      while (!_done) {
+        var _p;
+        _p = await _contractInstance.addrContracts(this.context.web3.web3.eth.defaultAccount, i);
+        if (_p === '0x')
+          _done =  true;
+        else
+          _contracts.push(_p);
+        ++i;
+      }
+      console.log(_contracts);
+    } catch(e) {
+      console.log('Error instantiating contract: ' + e);
+    }
+    this.setState({ contractInstance: _contractInstance });
+  }
+
+ 
   componentDidMount () {
   }
 
