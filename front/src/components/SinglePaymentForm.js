@@ -4,6 +4,8 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
+import PdfExtract from './PdfExtract'
+
 class SinglePaymentForm extends Component {
   constructor(props) {
     super(props)
@@ -41,7 +43,6 @@ class SinglePaymentForm extends Component {
     );
   }
 
-
   render() {
     return (
       <GridList
@@ -76,6 +77,7 @@ class SinglePaymentForm extends Component {
         </GridTile>
         <GridTile>
           <this.Submit />
+          <PdfExtract />
         </GridTile>
       </GridList>
     );
