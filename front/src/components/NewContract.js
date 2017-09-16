@@ -79,6 +79,7 @@ class NewContract extends Component {
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
+      this.props.router.push('/my_contracts');
     })
     .catch(e => {
       console.log('Could not execute tx: ' + e);
@@ -116,6 +117,7 @@ class NewContract extends Component {
     .then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false });
+      this.props.router.push('/my_contracts');
     })
     .catch(e => {
       console.log('Could not execute tx: ' + e);
