@@ -34,7 +34,7 @@ class NavDrawer extends Component {
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
       <AppBar
-        title='Bind'
+        title='Bond'
         showMenuIconButton={false} />
       <SelectableList
         value={location.pathname}
@@ -50,12 +50,12 @@ class NavDrawer extends Component {
         nestedItems={[
           <ListItem key='new_contract_single_pay'
             primaryTogglesNestedList={true}
-            primaryText='Car selling'
+            primaryText='Car Sale'
             href='#/new_contract/car'
           />, 
           <ListItem key='new_contract_rent_pay'
             primaryTogglesNestedList={true}
-            primaryText='House rent'
+            primaryText='Apartment Rental'
             href='#/new_contract/rent'
           />
         ]}
