@@ -9,10 +9,10 @@ contract Contract {
   }
 
   address public owner;
-  address buyer;                /* the party that is paying*/
-  address seller;               /* the party providing the object/service */
-  string buyerName;
-  string sellerName;
+  address public buyer;                /* the party that is paying*/
+  address public seller;               /* the party providing the object/service */
+  string public buyerName;
+  string public sellerName;
   string public desc;                  /* contract object description */
   uint public payAmount;           /* amount to be paid */
 

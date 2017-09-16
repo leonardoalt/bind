@@ -18,7 +18,9 @@ import contract from 'truffle-contract';
 
 import ContractJson from 'build/contracts/Contract.json';
 import {instantiateContract} from 'utils/contract';
-import { uport, web3 } from 'utils/uportSetup'
+import { uport, web3 } from 'utils/uportSetup';
+
+import Printer from './Printer';
 
 class Contract extends Component {
   constructor(props) {
@@ -48,22 +50,36 @@ class Contract extends Component {
       console.log(this.props.contract);
       _contractInstance = await _contract.at(this.props.contract);
       //_contract = await instantiateContract(ContractJson, this.context.web3.web3.currentProvider)
+      _sellerName = await _contractInstance.sellerName();
+      _buyerName = await _contractInstance.buyerName();
       _amount = await _contractInstance.payAmount();
       _desc = await _contractInstance.desc();
+      console.log(_sellerName);
+      console.log(_buyerName);
       console.log(_amount);
       console.log(_desc);
     } catch(e) {
       console.log('Error: ' + e);
     }
-    this.setState({ contractInstance: _contractInstance, amount: _amount, desc: _desc });
+    this.setState({ contractInstance: _contractInstance,
+                    amount, desc: _desc,
+                    sellerName: _sellerName, buyerName: _buyerName});
   }
 
   Title = () => {
     return 'Contract';
   }
 
+  PrintButton = () => {
+    if (this.state.isExpanded === false)
+      return null;
+    return <RaisedButton style={{margin: 12}} onTouchTap={() => window.print()} label={"Print contract"} primary />
+  }
+
   render() {
     return (
+    <div>
+      <div id="react-no-print">
       <Card style={{marginRight: 80, marginBottom: 20}}
             onExpandChange={lodash.debounce(this.onExpand, 150)}
             expanded={this.state.isExpanded}
@@ -83,7 +99,21 @@ class Contract extends Component {
             </TableBody>
           </Table>
         </CardText>
+        <div
+          style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
+        >
+          <this.PrintButton />
+        </div>
       </Card>
+      </div>
+      <Printer
+        sellerName={this.state.sellerName}
+        buyerName={this.state.buyerName}
+        amount={this.state.amount}
+        desc={this.state.desc}
+      />
+    </div>
+        
     );
   }
 
