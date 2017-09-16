@@ -58,6 +58,11 @@ contract Contract {
     _;
   }
 
+  modifier hasFunds(uint _value) {
+    require(msg.value >= _value);
+    _;
+  }
+
   function Contract(address _seller,
                     address _buyer,
                     string _sellerName,
@@ -97,16 +102,16 @@ contract Contract {
   }
 
   function completeSinglePay() private
+    hasFunds(payAmount)
   {
     /* TODO: should single pay contracts be terminated=true? */
     seller.transfer(payAmount);
   }
 
   /* make sure the buyer makes the deposit */
-  function startRecurrentPay() private {
-    if (msg.value < depositAmount) {
-      revert();
-    }
+  function startRecurrentPay() private
+    hasFunds(depositAmount)
+  {
   }
 
   /* buyer can only pay the current payment */
@@ -115,6 +120,7 @@ contract Contract {
     isValidContract()
     isRecurrent()
     isCurrentPayment(paymentNumber)
+    hasFunds(payAmount)
   {
     currentPayment++;
     seller.transfer(payAmount);
