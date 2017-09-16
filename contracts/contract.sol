@@ -21,8 +21,26 @@ contract Contract {
   uint depositAmount;           /* deposit stored in the contract */
   uint endDate;                 /* date a recurrent contract finishes */
 
+  bool signed;                  /* true once the buyer signs */
+  bool terminated;              /* true once the contract is terminated */
+
   modifier onlyBy(address _addr) {
     require(msg.sender == _addr);
+    _;
+  }
+
+  modifier notSigned() {
+    require(!signed);
+    _;
+  }
+
+  modifier isValidContract() {
+    require(signed && !terminated);
+    _;
+  }
+
+  modifier isRecurrent() {
+    require(payType != PAY_TYPE.SINGLE);
     _;
   }
 
@@ -43,16 +61,37 @@ contract Contract {
     depositAmount = _depositAmount;
     endDate = _endDate;
     desc = _desc;
+    signed = false;
+    terminated = false;
   }
 
   function buyerSign() public
     onlyBy(buyer)
+    notSigned()
   {
+    signed = true;
+    if (payType == PAY_TYPE.SINGLE) {
+      completeSinglePay();
+    } else {
+      startRecurrentPay();
+    }
+  }
+
+  function completeSinglePay() private
+  {
+    /* TODO: should single pay contracts be terminated=true? */
+    seller.transfer(payAmount);
+  }
+
+  function startRecurrentPay() private {
   }
 
   function buyerPayRecurring() public
     onlyBy(buyer)
+    isValidContract()
+    isRecurrent()
   {
+    
   }
 }
 
