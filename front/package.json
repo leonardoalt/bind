@@ -18,7 +18,7 @@
     "fs": "0.0.1-security",
     "glob": "^7.1.2",
     "history": "^2.0.0",
-    "ipfs-api": "14.3.5",
+    "ipfs-api": "^14.3.5",
     "js-sha3": "^0.6.1",
     "loadash": "^1.0.0",
     "lodash": "^4.17.4",

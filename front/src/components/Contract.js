@@ -56,6 +56,7 @@ class Contract extends Component {
     var _buyerName = '';
     var _buyer = '';
     var _signed = false;
+    var _desc_hash = '';
     try {
       const _contract = contract(ContractJson);  
       _contract.setProvider(web3.currentProvider);
@@ -174,11 +175,9 @@ class Contract extends Component {
                 <TableRowColumn style={{fontSize: 16}}>Value: {this.state.amount.toString()}</TableRowColumn>
                 <TableRowColumn style={{fontSize: 16}}>{this.buyerHasSigned()}</TableRowColumn>
               </TableRow>
-              <TableRow displayBorder={false}>
-                <TableRowColumn style={{fontSize: 16}}>Description: {this.state.desc}</TableRowColumn>
-              </TableRow>
             </TableBody>
           </Table>
+          {this.state.desc}
         </CardText>
         <div
           style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
