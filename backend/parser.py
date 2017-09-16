@@ -1,19 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import magic
-# Import smtplib for the actual sending function
-import smtplib
-# Import the email modules we'll need
-from email.mime.text import MIMEText
 import sys
-import re
-import urllib2
 import re
 import os
 import codecs
 import shutil
 import subprocess
-import configparser
 import json
 from polyglot.text import Text
 
