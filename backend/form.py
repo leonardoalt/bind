@@ -44,7 +44,7 @@ def run_ocr(pdf_store):
                     deposit=''
                 text=pipe.return_contract()
                 pipe.tidy_up()
-                return {"sum":sumofpayment,"frequency":frequency,"deposit": deposit, "sender":tenant,"receiver":landlord,"description":text}
+                return {"amount":sumofpayment,"payType":frequency,"deposit": deposit, "buyer":tenant,"seller":landlord,"desc":text}
     except Exception as e:
         print "error!"
         print e
