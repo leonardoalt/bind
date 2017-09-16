@@ -4,7 +4,9 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 
-import PdfExtract from './PdfExtract'
+import PdfExtract from './PdfExtract';
+
+import ipfsApi from 'ipfs-api';
 
 class SinglePaymentForm extends Component {
   constructor(props) {
@@ -32,11 +34,23 @@ class SinglePaymentForm extends Component {
   createContract = () => {
     console.log(this.props);
     console.log('create');
-    this.props.createSinglePaymentContract({buyer: this.state.buyer,
-                                            sellerName: this.state.sellerName,
-                                            buyerName: this.state.buyerName,
-                                            amount: this.state.amount,
-                                            desc: this.state.desc});
+
+    var ipfs = ipfsApi('localhost', '5001', {protocol:'http'});
+    var toAdd = [{
+      path: '/contract_desc',
+      content: Buffer.from(this.state.desc),
+    }];
+
+    ipfs.files.add(toAdd).then((res) => {
+      console.log(res);
+      var file = res[0];
+      let filepath = 'http://ipfs.io/ipfs/' + file.hash;
+      this.props.createSinglePaymentContract({buyer: this.state.buyer,
+                                              sellerName: this.state.sellerName,
+                                              buyerName: this.state.buyerName,
+                                              amount: this.state.amount,
+                                              desc: file.hash});
+    });
   }
 
   Submit = () => {
