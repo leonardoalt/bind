@@ -84,7 +84,7 @@ class MyContracts extends Component {
     if (window.auth === false)
       return null;
     var propItems = this.state.contracts.map(prop =>
-      <Contract isDetailed={false}
+      <Contract isExpanded={false}
         key={prop.idx}
         contract={prop.contract}
       />
