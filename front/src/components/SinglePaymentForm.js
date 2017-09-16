@@ -23,6 +23,10 @@ class SinglePaymentForm extends Component {
     this.setState({ [name]: value });
   }
 
+  updateContract = (json) => {
+    this.setState(json);
+  };
+
   createContract = () => {
     console.log(this.props);
     console.log('create');
@@ -81,7 +85,7 @@ class SinglePaymentForm extends Component {
         </GridTile>
         <GridTile>
           <this.Submit />
-          <PdfExtract />
+          <PdfExtract updateContract={(json) => this.updateContract(json)} />
         </GridTile>
       </GridList>
     );

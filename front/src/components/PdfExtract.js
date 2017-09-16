@@ -43,6 +43,7 @@ class PdfExtract extends Component {
          .then((response) => {
            console.log('Response is')
            console.log(response);
+           this.props.updateContract(response.data);
          })
          .catch(error => {
            alert('Error uploading pdf: ' + error);

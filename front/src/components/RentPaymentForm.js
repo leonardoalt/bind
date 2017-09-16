@@ -28,6 +28,10 @@ class RentPaymentForm extends Component {
     this.initializeTimestamps();
   }
 
+  updateContract = (json) => {
+    this.setState(json);
+  };
+
   initializeTimestamps = () => {
     const currentDate = moment().add(2, 'hour').toDate();
     this.setState({
@@ -40,12 +44,12 @@ class RentPaymentForm extends Component {
     console.log(this.props);
     console.log('create');
     this.props.createRentPaymentContract({buyer: this.state.buyer,
-                                            type: this.state.payType,
-                                            amount: this.state.amount,
-                                            firstDate: this.state.firstDate,
-                                            deposit: this.state.deposit,
-                                            endDate: this.state.endDate,
-                                            desc: this.state.desc});
+                                          type: this.state.payType,
+                                          amount: this.state.amount,
+                                          firstDate: this.state.firstDate,
+                                          deposit: this.state.deposit,
+                                          endDate: this.state.endDate,
+                                          desc: this.state.desc});
   }
 
   Submit = () => {
@@ -154,7 +158,7 @@ class RentPaymentForm extends Component {
         </GridTile>
         <GridTile>
           <this.Submit />
-          <PdfExtract />
+          <PdfExtract updateContract={(json) => this.updateContract(json)} />
         </GridTile>
       </GridList>
     );
