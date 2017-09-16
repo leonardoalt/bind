@@ -37,7 +37,7 @@ def run_ocr(pdf_store):
                 ners=pipe.get_nes()
                 landlord,tenant= pipe.extract_parties(ners)
                 sumofpayment,frequency= pipe.sum_payment()
-               
+
                 if frequency =="monthly" or frequency=="weekly":
                     deposit = pipe.find_deposit()
                 else:
@@ -59,7 +59,7 @@ def hello():
 
             #f= request.files['file']
     if f.filename[-3:].lower() in ["jpg","pdf","tif","png"]:
-        print "file is " + f.filename
+        print "file is %s" % (f.filename)
         filename = secure_filename(f.filename)
         #scan=request.files['scan']
         pdf_store="scans/"+filename
@@ -74,7 +74,7 @@ def hello():
                 return jsonify(json)
                    
             except Exception as es:
-                print "EXCEPTION IS " + es
+                print es
                 sys.exit()
 
 
