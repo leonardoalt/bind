@@ -4,7 +4,6 @@ import {Router, useRouterHistory} from 'react-router';
 import Routes from './Routes';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {createHashHistory} from 'history';
-import {Web3Provider} from 'react-web3';
 
 
 // Helpers for debugging
@@ -19,16 +18,12 @@ class Index extends React.Component {
   }
   render() {
     return (
-      <Web3Provider onChangeAccount={() => location.reload()}
-        passive={true}
-        >
         <Router
           history={useRouterHistory(createHashHistory)({queryKey: false})}
           onUpdate={() => window.scrollTo(0, 0)}
         >
           {Routes}
         </Router>
-      </Web3Provider>
     );
   }
 }

@@ -10,8 +10,8 @@ const ContractBin = `0x${fs.readFileSync('./compiledContracts/Contract.bin').toS
 var BindJSON = require('../build/contracts/Bind.json');
 var ContractJSON = require('../build/contracts/Contract.json');
 
-//const deployAddress = '0xc94f82d15969e8444c95aa8380267cd2ac65caa8';
-const deployAddress = '0x82De95A2c2805731a404C4F652514929cdB463bb';
+const deployAddress = '0xc94f82d15969e8444c95aa8380267cd2ac65caa8';
+//const deployAddress = '0x82De95A2c2805731a404C4F652514929cdB463bb';
 
 var web3 = new Web3('http://localhost:8545');
 

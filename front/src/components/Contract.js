@@ -18,6 +18,7 @@ import contract from 'truffle-contract';
 
 import ContractJson from 'build/contracts/Contract.json';
 import {instantiateContract} from 'utils/contract';
+import { uport, web3 } from 'utils/uportSetup'
 
 class Contract extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class Contract extends Component {
     var _desc = '';
     try {
       const _contract = contract(ContractJson);  
-      _contract.setProvider(this.context.web3.web3.currentProvider);
+      _contract.setProvider(web3.currentProvider);
       console.log(this.props.contract);
       _contractInstance = await _contract.at(this.props.contract);
       //_contract = await instantiateContract(ContractJson, this.context.web3.web3.currentProvider)
@@ -91,9 +92,5 @@ class Contract extends Component {
   }
 
 }
-
-Contract.contextTypes = {
-  web3: PropTypes.object
-};
 
 export default Contract;

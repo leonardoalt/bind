@@ -163,24 +163,13 @@ class Master extends Component {
     styles.root.paddingLeft = 256;
     styles.footer.paddingLeft = 256;
 
-    const web3Context = this.context.web3;
-    var errorMessage = null;
-    if (web3Context.networkId !== null && web3Context.networkId !== '42' && web3Context.networkId !== '3') {
-      errorMessage = <div> <WarningIcon color={red500}/> Runs only in the Kovan or Ropsten networks, please switch to use the Dapp</div>;
-      //this.props.router.push('');
-    }
-    else if (web3Context.accounts.length === 0) {
-      errorMessage = <div> <WarningIcon color={red500}/>
-        Make sure you unlock or have at least one account in your wallet
-      </div>;
-    }
     return (
       <div>
         <div style={{marginLeft: 210}}>
           <div id="react-no-print">
           <AppBar
           onLeftIconButtonTouchTap={this.handleTouchTapLeftIconButton}
-          title={(errorMessage === null ) ? this.props.location.pathname : errorMessage}
+          title={this.props.location.pathname}
           zDepth={0}
           style={styles.appBar}
           showMenuIconButton={false}
@@ -202,10 +191,5 @@ class Master extends Component {
     );
   }
 }
-
-Master.contextTypes = {
-  web3: PropTypes.object
-};
-
 
 export default withWidth()(Master);

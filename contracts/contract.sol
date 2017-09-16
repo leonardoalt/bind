@@ -11,6 +11,8 @@ contract Contract {
   address public owner;
   address buyer;                /* the party that is paying*/
   address seller;               /* the party providing the object/service */
+  string buyerName;
+  string sellerName;
   string public desc;                  /* contract object description */
   uint public payAmount;           /* amount to be paid */
 
@@ -58,6 +60,8 @@ contract Contract {
 
   function Contract(address _seller,
                     address _buyer,
+                    string _sellerName,
+                    string _buyerName,
                     PAY_TYPE _payType,
                     uint _payAmount,
                     uint _firstPayDueDate,
@@ -67,6 +71,8 @@ contract Contract {
     owner = msg.sender;
     buyer = _buyer;
     seller = _seller;
+    sellerName = _sellerName;
+    buyerName = _buyerName;
     payType = _payType;
     firstPayDueDate = _firstPayDueDate;
     payAmount = _payAmount;

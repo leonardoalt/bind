@@ -23,10 +23,14 @@ contract Bind {
   }
 
   function createSinglePayContract(address _buyer,
+                                   string _sellerName,
+                                   string _buyerName,
                                    uint _payAmount,
                                    string _desc) public {
     Contract _contract = new Contract(msg.sender,
                                       _buyer,
+                                      _sellerName,
+                                      _buyerName,
                                       Contract.PAY_TYPE.SINGLE,
                                       _payAmount,
                                       0,
@@ -38,6 +42,8 @@ contract Bind {
   }
 
   function createRecurrentPayContract(address _buyer,
+                          string _sellerName,
+                          string _buyerName,
                           Contract.PAY_TYPE _payType,
                           uint _payAmount,
                           uint _firstPayDueDate,
@@ -46,6 +52,8 @@ contract Bind {
                           string _desc) public {
     Contract _contract = new Contract(msg.sender,
                                       _buyer,
+                                      _sellerName,
+                                      _buyerName,
                                       _payType,
                                       _payAmount,
                                       _firstPayDueDate,
