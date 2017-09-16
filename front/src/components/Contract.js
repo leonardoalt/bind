@@ -22,6 +22,8 @@ import { uport, web3 } from 'utils/uportSetup';
 
 import Printer from './Printer';
 
+import axios from 'axios';
+
 class Contract extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +67,14 @@ class Contract extends Component {
       _buyer = await _contractInstance.buyer();
       _buyerName = await _contractInstance.buyerName();
       _amount = await _contractInstance.payAmount();
-      _desc = await _contractInstance.desc();
+      _desc_hash = await _contractInstance.desc();
+      let filepath = 'http://ipfs.io/ipfs/' + _desc_hash;
+      try {
+        let file = await axios.get(filepath);
+        _desc = file.data;
+      } catch (err) {
+        _desc = _desc_hash;
+      }
       _signed = await _contractInstance.signed();
       console.log('Signed is');
       console.log(_signed);
