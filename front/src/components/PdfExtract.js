@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
+
 
 class PdfExtract extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      uploading: false,
       file: null
     }
   }
@@ -34,28 +37,35 @@ class PdfExtract extends Component {
     var data = new FormData();
     data.append('scan', pdf);
 
+    this.setState({ uploading: true });
+
     axios.post('http://localhost:50001/parse_contract', data, {})
-    .then((response) => {
-      console.log('Response is')
-      console.log(response);
-    })
-    .catch(error => {
-      console.log('Error: ' + error);
-    });
+         .then((response) => {
+           console.log('Response is')
+           console.log(response);
+         })
+         .catch(error => {
+           console.log('Error: ' + error);
+         })
+         .then(() => {
+           this.setState({ uploading: false });
+         });
   }
 
   render() {
-    return (
-      <RaisedButton
-        label="Read from PDF"
-        containerElement="label"
-        labelPosition="before"
-        style={this.styles.button}
-        primary
-      >
-        <input type="file" onChange={this.handleFileUpload} style={this.styles.pdfInput}/>
+    if (this.state.uploading) {
+      return <CircularProgress />
+    } else {
+      return <RaisedButton
+               label="Read from PDF"
+               containerElement="label"
+               labelPosition="before"
+               style={this.styles.button}
+               primary
+             >
+        <input type="file" onChange={(e) => this.handleFileUpload(e)} style={this.styles.pdfInput}/>
       </RaisedButton>
-    );
+    }
   }
  }
 
