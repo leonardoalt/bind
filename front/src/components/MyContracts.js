@@ -94,7 +94,7 @@ class MyContracts extends Component {
   }
 
   ListContracts = () => {
-    if (window.auth === false)
+    if (!window.auth)
       return null;
     var propItems = this.state.contracts.map(prop =>
       <Contract isExpanded={false}

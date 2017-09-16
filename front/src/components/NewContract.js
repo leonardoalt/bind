@@ -130,6 +130,8 @@ class NewContract extends Component {
   }
 
   Form = () => {
+    if (!window.auth)
+      return null;
     if (this.props.params.type === 'car')
       return <SinglePaymentForm 
               createSinglePaymentContract={this.createSinglePaymentContract.bind(this)}
