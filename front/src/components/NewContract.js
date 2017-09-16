@@ -84,7 +84,7 @@ class NewContract extends Component {
     //})
     //_contract.createSinglePayContract(data.buyer, new BigNumber(data.amount), data.desc,
     //  {from: this.context.web3.web3.eth.defaultAccount})
-    _contract.createSinglePayContract(data.buyer, new BigNumber(data.amount), data.desc,
+    _contract.createSinglePayContract(data.buyer, data.sellerName, data.buyerName, new BigNumber(data.amount), data.desc,
       {from: addr})
     .then((tx) => {
       console.log(tx);
@@ -112,6 +112,8 @@ class NewContract extends Component {
     //  });
     //})
     _contract.createRecurrentPayContract(data.buyer,
+                                         data.sellerName,
+                                         data.buyerName,
                                          new BigNumber(data.type),
                                          new BigNumber(data.amount),
                                          new BigNumber(moment(data.firstDate).unix()),

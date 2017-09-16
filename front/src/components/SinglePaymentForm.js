@@ -12,7 +12,9 @@ class SinglePaymentForm extends Component {
     this.state = {
       buyer: '',
       amount: '',
-      desc: ''
+      desc: '',
+      buyerName: '',
+      sellerName: ''
     }
   }
 
@@ -31,6 +33,8 @@ class SinglePaymentForm extends Component {
     console.log(this.props);
     console.log('create');
     this.props.createSinglePaymentContract({buyer: this.state.buyer,
+                                            sellerName: this.state.sellerName,
+                                            buyerName: this.state.buyerName,
                                             amount: this.state.amount,
                                             desc: this.state.desc});
   }
@@ -53,6 +57,24 @@ class SinglePaymentForm extends Component {
         cols={2}
         cellHeight={100}
       >
+        <GridTile>
+          <TextField
+            fullWidth={true}
+            name="buyerName"
+            value={this.state.buyerName}
+            floatingLabelText="Buyer's name"
+            onChange={this.handleOnChange}
+          />
+        </GridTile>
+        <GridTile>
+          <TextField
+            fullWidth={true}
+            name="sellerName"
+            value={this.state.sellerName}
+            floatingLabelText="Seller's name"
+            onChange={this.handleOnChange}
+          />
+        </GridTile>
         <GridTile>
           <TextField
             fullWidth={true}

@@ -20,7 +20,9 @@ class RentPaymentForm extends Component {
       firstDate: '',
       deposit: '',
       endDate: '',
-      desc: ''
+      desc: '',
+      sellerName: '',
+      buyerName: ''
     }
   }
 
@@ -44,6 +46,8 @@ class RentPaymentForm extends Component {
     console.log(this.props);
     console.log('create');
     this.props.createRentPaymentContract({buyer: this.state.buyer,
+                                          sellerName: this.state.sellerName,
+                                          buyerName: this.state.buyerName,
                                           type: this.state.payType,
                                           amount: this.state.amount,
                                           firstDate: this.state.firstDate,
@@ -89,6 +93,25 @@ class RentPaymentForm extends Component {
         cols={3}
         cellHeight={100}
       >
+        <GridTile>
+          <TextField
+            fullWidth={true}
+            name="buyerName"
+            value={this.state.buyerName}
+            floatingLabelText="Buyer's name"
+            onChange={this.handleOnChange}
+          />
+        </GridTile>
+        <GridTile>
+          <TextField
+            fullWidth={true}
+            name="sellerName"
+            value={this.state.sellerName}
+            floatingLabelText="Seller's name"
+            onChange={this.handleOnChange}
+          />
+        </GridTile>
+        <GridTile></GridTile>
         <GridTile>
           <TextField
             fullWidth={true}
