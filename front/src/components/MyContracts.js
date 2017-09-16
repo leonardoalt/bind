@@ -50,18 +50,23 @@ class MyContracts extends Component {
     this.setState({ contractInstance: _contractInstance, contracts: _contracts });
   }
 
- 
   componentDidMount () {
   }
 
+  setProfileFunction(profile) {
+    this.instantiateContract(profile);
+  }
+
+
   LoginComp = () => {
     if (window.auth) {
-      if (!this.state.contractInstance)
+      if (this.state.contractInstance === null)
           this.instantiateContract(window.profile);
       return null;
     }
     return (
       <Login
+        setProfileFunction={this.setProfileFunction.bind(this)}
       />
     );
   }

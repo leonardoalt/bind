@@ -62,7 +62,7 @@ class Contract extends Component {
       console.log('Error: ' + e);
     }
     this.setState({ contractInstance: _contractInstance,
-                    amount, desc: _desc,
+                    amount: _amount, desc: _desc,
                     sellerName: _sellerName, buyerName: _buyerName});
   }
 
