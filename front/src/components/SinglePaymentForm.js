@@ -41,7 +41,7 @@ class SinglePaymentForm extends Component {
 
   Submit = () => {
     if (this.props.txPending)
-      return <CircularProgress />
+      return <CircularProgress style={{margin:12}}/>
     return (
       <RaisedButton
         label="Create"

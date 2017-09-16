@@ -65,7 +65,7 @@ class PdfExtract extends Component {
 
   render() {
     if (this.state.uploading) {
-      return <CircularProgress />
+      return <CircularProgress style={{margin:12}}/>
     } else {
       return <RaisedButton
                label="Read from PDF"

@@ -71,6 +71,7 @@ class Contract extends Component {
       console.log(_signed);
       console.log(_seller);
       console.log(_buyer);
+      console.log(_amount);
       console.log(this.props.userAddress);
     } catch(e) {
       console.log('Error: ' + e);
@@ -103,8 +104,12 @@ class Contract extends Component {
 
   sign() {
     this.setState({ transactionPending: true });
-    this.state.contractInstance.buyerSign({from: this.props.userAddress})
-    .then((tx) => {
+    console.log('value is');
+    console.log(this.state.amount.toString());
+    this.state.contractInstance.buyerSign({
+          from: this.props.userAddress,
+          value: this.state.amount
+    }).then((tx) => {
       console.log(tx);
       this.setState({ transactionPending: false, signed: true });
     })
@@ -119,7 +124,7 @@ class Contract extends Component {
       return null;
  
     if (this.state.transactionPending)
-      return <CircularProgress />;
+      return <CircularProgress style={{margin:12}}/>;
 
     if (this.props.userAddress !== this.state.buyer)
       return null;
