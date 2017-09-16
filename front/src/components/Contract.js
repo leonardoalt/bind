@@ -92,8 +92,7 @@ class Contract extends Component {
   }
 
   PrintButtonAct = () => {
-    this.setState({ print: true });
-    window.print();
+    this.props.setPrintFunction(this.state);
   }
 
   PrintButton = () => {
@@ -104,8 +103,6 @@ class Contract extends Component {
 
   sign() {
     this.setState({ transactionPending: true });
-    console.log('value is');
-    console.log(this.state.amount.toString());
     this.state.contractInstance.buyerSign({
           from: this.props.userAddress,
           value: this.state.amount
@@ -136,20 +133,6 @@ class Contract extends Component {
         primary
         style={{margin:12}}
         disabled={this.state.signed}
-      />
-    );
-  }
-
-  PrinterComp = () => {
-    if (this.state.print === false)
-      return null;
-    return (
-      <Printer
-        sellerName={this.state.sellerName}
-        buyerName={this.state.buyerName}
-        amount={this.state.amount}
-        desc={this.state.desc}
-        print={this.state.print}
       />
     );
   }
@@ -196,7 +179,6 @@ class Contract extends Component {
         </div>
       </Card>
       </div>
-      <this.PrinterComp />
     </div>
         
     );
