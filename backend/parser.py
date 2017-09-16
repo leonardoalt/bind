@@ -20,9 +20,9 @@ from polyglot.text import Text
 
 class Parser:
 
-    def __init__(self,pdf_path,ctype):
+    def __init__(self,pdf_path):
         self.pdf_path = pdf_path
-        self.contract_type=ctype
+        self.contract_type=''
         self.tif_dir = '/'.join(self.pdf_path.split('/')[:-1])+'/tifs'
         self.txt_dir='/'.join(self.pdf_path.split('/')[:-1])+'/txt'
         self.txt=''
@@ -53,6 +53,12 @@ class Parser:
         for f in sorted(os.listdir(self.txt_dir)):
             self.txt+="\n"+codecs.open(self.txt_dir+'/'+f,'r','utf8').read()
 
+        cleantext = self.txt.replace("\n\n","PARAGRAPH")
+        cleantext = cleantext.replace("\n"," ")
+        cleantext = cleantext.replace("PARAGRAPH","\n\n")
+        self.txt = cleantext
+
+
         
     def extract_parties(self,ners):
         pers_tmp=[]
@@ -70,7 +76,7 @@ class Parser:
         i=0
         lastadded=0
         while i in range(len(pers_tmp)-1):
-            print i
+
             if re.search(' '.join(pers_tmp[i])+'( +(and|&) +)'+' '.join(pers_tmp[i+1]),self.txt)!=None:
                 pers.append(re.search(' '.join(pers_tmp[i])+'( +(and|&) +)'+' '.join(pers_tmp[i+1]),self.txt).group(0))
                 i+=1
@@ -80,7 +86,6 @@ class Parser:
             i+=1
         if lastadded !=len(pers_tmp):
             pers.append(pers_tmp[-1])
-        print pers
         if isinstance(pers[0], list):
             entityindex = self.txt.index(" ".join(pers[0]))
             ponestring=" ".join(pers[0])
@@ -93,11 +98,25 @@ class Parser:
         else:
             ptwostring=pers[1]
 
+        context = self.txt[entityindex-100:entityindex+100]
         if self.contract_type=="rental":
             try:
-                tenantindex=self.txt.lower().index("tenant")
-                landlordindex=self.txt.lower().index("landlord")
-            
+                if "tenant" in context.lower():
+                    tenantindex=context.lower().index("tenant")
+                elif "lessee" in context.lower():
+                    tenantindex=context.lower().index("lessee")
+                else: 
+                     raise Exception('no mention!')
+                if "landlord" in context.lower():
+                    landlordindex=context.lower().index("landlord")
+                elif "lessor" in context.lower():
+                    landlordindex=context.lower().index("lessor")
+                else:
+                     raise Exception('no mention!')
+                entityindex = context.lower().index(ponestring)
+                print tenantindex
+                print entityindex
+                print landlordindex
                 if abs(tenantindex-entityindex)< abs(landlordindex-entityindex):
                 
                     tenant=ponestring
@@ -108,8 +127,7 @@ class Parser:
             except:
                 tenant=ptwostring
                 landlord = ponestring
-            print tenant+" is the tenant"
-            print landlord+" is the landlord"
+            
             return landlord, tenant
         else:
             try:
@@ -127,9 +145,6 @@ class Parser:
                     raise Exception('no mention!')
           
                 if abs(tenantindex-entityindex)< abs(landlordindex-entityindex):
-                    print tenantindex
-                    print entityindex
-                    print landlordindex
                     
                     tenant=ponestring
                     landlord=ptwostring
@@ -139,54 +154,70 @@ class Parser:
             except:
                 tenant=ptwostring
                 landlord = ponestring
-            print tenant+" is the buyer"
-            print landlord+" is the seller"
             return landlord, tenant
 
     def return_contract(self):
+
         return self.txt
 
 
     def sum_payment(self):
-        if self.contract_type=="rental":
-            sums=[]
-            expr= re.findall("month[^ ]*",self.txt)
-            print expr
-            for e in expr:
-                eind=self.txt.lower().index(e.lower())
-                sums+=re.findall("\d+ *\, *\d+\$*",self.txt[eind-35:eind+35])
-            print sums
-            if sums==[]:
+        if re.findall("monthly|per month",self.txt) !=[]:
+                sums=[]
+                expr= re.findall("monthly|per month",self.txt)
+
                 for e in expr:
                     eind=self.txt.lower().index(e.lower())
-                    sums+=re.findall("\d+ *\,* *\d+\$*",self.txt[eind-35:eind+35])
-            if sums==[]:
-                sums.append('0')
-            self.sum = sums[0]
-            return sums[0]
-        elif self.contract_type=="unique":
+                    sums+=re.findall("\d+ *\, *\d+\$*",self.txt[eind-35:eind+35])
+                if sums==[]:
+                    for e in expr:
+                        eind=self.txt.lower().index(e.lower())
+                        sums+=re.findall("\d+ *\,* *\d+\$*",self.txt[eind-35:eind+35])
+                if sums==[]:
+                    sums.append('0')
+                self.sum = sums[0]
+                self.contract_type="monthly"
+                return sums[0],"monthly"
+        elif re.findall("weekly|per week",self.txt) !=[]:
+                sums=[]
+                expr= re.findall("weekly|per week",self.txt)
+
+                for e in expr:
+                    eind=self.txt.lower().index(e.lower())
+                    sums+=re.findall("\d+ *\, *\d+\$*",self.txt[eind-35:eind+35])
+
+                if sums==[]:
+                    for e in expr:
+                        eind=self.txt.lower().index(e.lower())
+                        sums+=re.findall("\d+ *\,* *\d+\$*",self.txt[eind-35:eind+35])
+                if sums==[]:
+                    sums.append('0')
+                self.sum = sums[0]
+                self.contract_type="weekly"
+                return sums[0],"weekly"
+        else:
+            self.contract_type="one-time"
 
             sums= re.findall("\d+ *\, *\d+\$*",self.txt)
             if sums==[]:
                 sums= re.findall("\d+ *\,* *\d+\$*",self.txt)
-            
+            if sums==[]:
+                sums=["0"]
             self.sum = sums[0]
-            return self.sum
+            return self.sum,"one-time"
         
     def find_deposit(self):
         sums=re.findall("\d+ *\, *\d+\$*",self.txt)
         deposit="0"
-        print sums
+
         for s in sums:
 
             ind = self.txt.index(s)
 
             if "deposit" in self.txt[ind-35:ind+35].lower() and len(s)>4 and int(s.replace(" ","").replace(",","").replace("$","")) > int(self.sum.replace(" ","").replace(",","").replace("$","")):
-                print s
-                print self.sum
+            
                 deposit = s
                 break
-        print "The deposit is "+deposit
         return deposit
       
     def get_nes(self):
