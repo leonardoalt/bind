@@ -44,6 +44,8 @@ class Contract extends Component {
     var _contractInstance = null;
     var _amount = '';
     var _desc = '';
+    var _sellerName = '';
+    var _buyerName = '';
     try {
       const _contract = contract(ContractJson);  
       _contract.setProvider(web3.currentProvider);
