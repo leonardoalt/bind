@@ -45,6 +45,7 @@ class PdfExtract extends Component {
            console.log(response);
          })
          .catch(error => {
+           alert('Error uploading pdf: ' + error);
            console.log('Error: ' + error);
          })
          .then(() => {
