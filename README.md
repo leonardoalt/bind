@@ -10,6 +10,11 @@ Back-end:
 Our back-end consists of a server that receives pdf files as requests to extract
 contract info
 Dependencies:
+convert
+tesseract
+polyglot (with embeddings2.en ner2.en)
+flask
+flask_cors
 
 Blockchain:
 The blockchain smart contracts are deployed on the Rinkeby testnet. The contracts
